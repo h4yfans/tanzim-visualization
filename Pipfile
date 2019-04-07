@@ -9,6 +9,7 @@ verify_ssl = true
 django = "*"
 beautifulsoup4 = "*"
 requests = "*"
+django-chartit = "*"
 
 [requires]
 python_version = "3.7"
