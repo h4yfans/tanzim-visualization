@@ -10,6 +10,7 @@ django = "*"
 beautifulsoup4 = "*"
 requests = "*"
 django-chartit = "*"
+djangorestframework = "*"
 
 [requires]
 python_version = "3.7"

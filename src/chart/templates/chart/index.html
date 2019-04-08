@@ -6,52 +6,195 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Tanzim</title>
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <body>
-    <div class="container">
-        <canvas id="myChart" width="400" height="200"></canvas>
+<div class="container">
+    <div id="chart">
+        <div class="toolbar">
+            <button id="one_month">1M</button>
+            <button id="six_months">6M</button>
+            <button id="one_year" class="active">1Y</button>
+            <button id="ytd">YTD</button>
+            <button id="all">ALL</button>
+        </div>
+        <div id="timeline-chart"></div>
     </div>
+</div>
 </body>
+<style>
+    #chart {
+        max-width: 1000px;
+        margin: 35px auto;
+    }
 
+    .toolbar {
+        margin-left: 45px;
+    }
 
+    button {
+        background: #fff;
+        color: #222;
+        border: 1px solid #e7e7e7;
+        border-bottom: 2px solid #ddd;
+        border-radius: 2px;
+        padding: 4px 17px;
+    }
+
+    button.active {
+        color: #fff;
+        background: #008FFB;
+        border: 1px solid blue;
+        border-bottom: 2px solid blue;
+    }
+
+    button:focus {
+        outline: 0;
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
 <script type="application/javascript">
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: {{ dates|safe }},
-            datasets: [{
-                label: '# of Votes',
-                data: {{ prices }},
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+
+
+    axios.get('/get-ibb-data')
+        .then(function (response) {
+            var options = {
+                annotations: {
+                    yaxis: [{
+                        y: 30,
+                        borderColor: '#999',
+                        label: {
+                            show: true,
+                            text: 'Support',
+                            style: {
+                                color: "#fff",
+                                background: '#00E396'
+                            }
+                        }
+                    }],
+                    xaxis: [{
+                        x: new Date('14 Nov 2012').getTime(),
+                        borderColor: '#999',
+                        yAxisIndex: 0,
+                        label: {
+                            show: true,
+                            text: 'Rally',
+                            style: {
+                                color: "#fff",
+                                background: '#775DD0'
+                            }
+                        }
+                    }]
+                },
+                chart: {
+                    type: 'area',
+                    height: 350,
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                series: [{
+                    data: response.data.dateandprice,
+                },
+
                 ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
+                markers: {
+                    size: 0,
+                    style: 'hollow',
+                },
+                xaxis: {
+                    type: 'datetime',
+                    min: new Date('01 Mar 2012').getTime(),
+                    tickAmount: 6,
+                },
+                tooltip: {
+                    x: {
+                        format: 'dd MMM yyyy'
                     }
-                }]
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.7,
+                        opacityTo: 0.9,
+                        stops: [0, 100]
+                    }
+                },
+
             }
-        }
-    });
+
+            var chart = new ApexCharts(
+                document.querySelector("#timeline-chart"),
+                options
+            );
+
+            chart.render();
+
+            var resetCssClasses = function (activeEl) {
+                var els = document.querySelectorAll("button");
+                Array.prototype.forEach.call(els, function (el) {
+                    el.classList.remove('active');
+                });
+
+                activeEl.target.classList.add('active')
+            }
+
+            document.querySelector("#one_month").addEventListener('click', function (e) {
+                resetCssClasses(e)
+                chart.updateOptions({
+                    xaxis: {
+                        min: new Date('28 Jan 2013').getTime(),
+                        max: new Date('27 Feb 2013').getTime(),
+                    }
+                })
+            })
+
+            document.querySelector("#six_months").addEventListener('click', function (e) {
+                resetCssClasses(e)
+                chart.updateOptions({
+                    xaxis: {
+                        min: new Date('27 Sep 2012').getTime(),
+                        max: new Date('27 Feb 2013').getTime(),
+                    }
+                })
+            })
+
+            document.querySelector("#one_year").addEventListener('click', function (e) {
+                resetCssClasses(e)
+                chart.updateOptions({
+                    xaxis: {
+                        min: new Date('27 Feb 2012').getTime(),
+                        max: new Date('27 Feb 2013').getTime(),
+                    }
+                })
+            })
+
+            document.querySelector("#ytd").addEventListener('click', function (e) {
+                resetCssClasses(e)
+                chart.updateOptions({
+                    xaxis: {
+                        min: new Date('01 Jan 2013').getTime(),
+                        max: new Date('27 Feb 2013').getTime(),
+                    }
+                })
+            })
+
+            document.querySelector("#all").addEventListener('click', function (e) {
+                resetCssClasses(e)
+                chart.updateOptions({
+                    xaxis: {
+                        min: undefined,
+                        max: undefined,
+                    }
+                })
+            })
+
+            document.querySelector("#ytd").addEventListener('click', function () {
+
+            })
+        })
 </script>
 </html>
 

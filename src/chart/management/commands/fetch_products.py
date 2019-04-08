@@ -12,8 +12,8 @@ from chart.models import Vegetable
 
 class getVegetableData(BaseCommand):
 
-    parsed_date = parse_date('2010-01-01')
-    today = parse_date('2018-04-07')
+    parsed_date = parse_date('2018-04-07')
+    today = parse_date('2019-04-08')
 
     while parsed_date != today:
         data = {
