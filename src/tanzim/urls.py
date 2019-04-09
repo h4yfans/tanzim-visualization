@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView.as_view()),
     path('get-ibb-data/', GetIBBData),
-    path('', include('chart.urls'))
+    path('', include('chart.api.urls'))
 ]

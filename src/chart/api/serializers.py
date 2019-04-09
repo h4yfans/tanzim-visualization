@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from .models import Vegetable
+from chart.models import Vegetable
 
 
-class TanzimSerializer(serializers.ModelSerializer):
+class VegetableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vegetable
         fields = ('name',)
