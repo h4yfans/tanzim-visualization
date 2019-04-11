@@ -4,7 +4,7 @@ from django.db.models import CharField
 
 from django.http import JsonResponse
 
-from .models import Vegetable, Product
+from .models import Vegetable
 
 class IndexView(TemplateView):
     template_name = 'chart/index.html'
