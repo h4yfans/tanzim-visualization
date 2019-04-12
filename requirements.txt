@@ -4,8 +4,9 @@ chardet==3.0.4
 Django==2.2
 django-chartit==0.2.9
 djangorestframework==3.9.2
+gunicorn==19.9.0
 idna==2.8
-pytz==2018.9
+pytz==2019.1
 requests==2.21.0
 soupsieve==1.9
 sqlparse==0.3.0
