@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'tanzim.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, '../../tanzim-chart/db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, '../../tanzim-chart/../db.sqlite3'),
     }
 }
 
