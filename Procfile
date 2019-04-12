@@ -1,1 +1,1 @@
-web: gunicorn src.tanzim.wsgi
+web: gunicorn tanzim.wsgi
