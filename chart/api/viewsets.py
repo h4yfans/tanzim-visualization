@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 
 from chart.models import Vegetable, Product
-from .serializers import VegetableSerializer, ProductSerializer
+from .serializers import VegetableSerializer
 from rest_framework import viewsets
 from django.db.models.functions import Cast
 from django.db.models import CharField
@@ -20,5 +20,5 @@ class ProductViewSet(viewsets.ViewSet):
         queryset = Product.objects.filter(vegetable_id=product_id).annotate(ndate=Cast('date', CharField())).order_by(
             'date')
         queryset = queryset.values_list('ndate', 'price')
-
-        return Response(queryset)
+        data = {'data_and_price': queryset}
+        return Response(data)

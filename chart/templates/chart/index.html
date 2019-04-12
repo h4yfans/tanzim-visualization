@@ -57,8 +57,9 @@
 <script type="application/javascript">
 
 
-    axios.get('/get-ibb-data')
+    axios.get('/api/products', {params: {product_id: 158}})
         .then(function (response) {
+            console.log(response)
             var options = {
                 annotations: {
                     yaxis: [{
@@ -83,7 +84,7 @@
                     enabled: false
                 },
                 series: [{
-                    data: response.data.dateandprice,
+                    data: response.data.data_and_price
                 },
 
                 ],
@@ -173,8 +174,8 @@
                 resetCssClasses(e)
                 chart.updateOptions({
                     xaxis: {
-                        min: undefined,
-                        max: undefined,
+                        min: response.data[0],
+                        max: response.data[response.length-1],
                     }
                 })
             })
